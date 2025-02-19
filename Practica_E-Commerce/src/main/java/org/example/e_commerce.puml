@@ -1,0 +1,56 @@
+@startuml
+package "org.example" {
+
+    abstract class MetodoPago {
+        + procesarPago(double importe) : void
+    }
+
+    class TarjetaCredito {
+        - String nro_tarjeta
+        - String tipo
+        + TarjetaCredito(String nro_tarjeta, String tipo)
+        + comprobarNumTarjeta(String nro_tarjeta) : boolean
+        + comprobarTipo(String tipo) : boolean
+        + validarTarjeta(String nro_tarjeta, String tipo) : void
+        + procesarPago(double importe) : void
+    }
+
+    class PayPal {
+        - final double SALDO_DEF
+        - String cuenta
+        - double saldo
+        + PayPal(String cuenta, double saldo)
+        + PayPal(String cuenta)
+        + comprobarCuenta(String cuenta) : boolean
+        + validarPaypal(String cuenta) : void
+        + procesarPago(double importe) : void
+    }
+
+    class Bizum {
+        - String telefono
+        - int pin
+        + Bizum(String telefono)
+        + pinRandom() : int
+        + comprobarTelefono(String telefono) : boolean
+        + comprobarPin(int pin) : boolean
+        + validarBizum(String telefono, int pin) : void
+        + procesarPago(double importe) : void
+    }
+
+    class Tienda {
+        + iniciarPago() : void
+        + crearBizum() : MetodoPago
+        + crearPaypal() : MetodoPago
+        + crearTarjeta() : MetodoPago
+        + realizarPago(MetodoPago metodo, double importe) : void
+    }
+
+
+    MetodoPago <|-- TarjetaCredito
+    MetodoPago <|-- PayPal
+    MetodoPago <|-- Bizum
+
+
+    Tienda ..> MetodoPago : crea >
+}
+@enduml
